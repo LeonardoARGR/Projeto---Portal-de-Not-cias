@@ -1,0 +1,16 @@
+Materia
+- ID
+- Titulo
+- Conteudo
+- Imagem
+- Autor
+- Editor
+- Status
+
+Usuario
+- ID
+- Nome
+- Email
+- Senha
+- Imagem
+- Tipo
