@@ -8,17 +8,23 @@
     <body>
         <div class="container-fluid">
             <div class="row menu-bar">
-                <a href="user_materias.php">Voltar</a>
+                <a href="user_dados.php" class="btn-voltar">Voltar</a>
             </div>
         </div>
         <div class="container-fluid main-container">
-            <form action="postarNoticia.php" method="post" class="escrever-form">
+            <form action="postarNoticia.php" method="post" enctype="multipart/form-data" class="escrever-form">
                 
-                <input class="titulo-form" placeholder="Título" type="text" name="nome" required>
-                <input type="file" name="imagem" id="imagem" accept="image/*">
-                <textarea class="conteudo-form" placeholder="Escreva aqui..." name="descricao"></textarea required>
-                
-                <input class="btn btn-outline-secondary btn-form" type="submit" value="Enviar">
+                <input class="titulo-form" placeholder="Título" type="text" name="titulo" required>
+                <textarea class="conteudo-form" placeholder="Escreva aqui..." name="conteudo"></textarea required>
+
+                <div class="row">
+                    <div class="col-6">
+                        <input class="form-control" type="file" name="imagem" id="imagem" accept="image/*">
+                    </div>
+                    <div class="col-6">
+                        <input class="btn btn-outline-secondary btn-form" type="submit" value="Enviar">
+                    </div>
+                </div>
             </form>
         </div>
     </body>

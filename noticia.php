@@ -9,12 +9,13 @@
         <div class="container-fluid">
             <div class="row menu-bar">
                 <div class="col-4">
-                    <a href="check_user.php">Usuário</a>
+                    <a href="index.php" class="btn-voltar">Voltar</a>
                 </div>
                 <div class="col-4 text-center">
-                    <a href="index.php">Teste</a>
+                    <div class="titulo-site">Mundo em Foco</div>
                 </div>
                 <div class="col-4 text-end">
+                    <a href="check_user.php"><img class="icone-user" src="src/user.png"></a>
                 </div>
             </div>
         </div>
@@ -32,15 +33,19 @@
     $conexao = mysqli_connect($host, $user, $pass, $base);
 
     if(isset($_GET['id'])) {
-        $resultadoQueryMySQL = mysqli_query($conexao, "select titulo, conteudo, id_imagem, id_autor from noticia");
-        $escrever = mysqli_fetch_array($resultadoQueryMySQL);
-        $resultadoQueryMySQL = mysqli_query($conexao, "select nome from usuario where id = '".$escrever["id_autor"]."'");
-        $autor = mysqli_fetch_array($resultadoQueryMySQL);
+        $noticiaSQL = mysqli_query($conexao, "select titulo, conteudo, id_imagem, id_autor from noticia WHERE id = ". $_GET["id"]);
+        $escrever = mysqli_fetch_array($noticiaSQL);
+        $autorSQL = mysqli_query($conexao, "select nome from usuario where id = '".$escrever["id_autor"]."'");
+        $autor = mysqli_fetch_array($autorSQL);
 
 
 
         echo '<div class="titulo-noticia">'.htmlspecialchars($escrever['titulo']).'</div>';
-        echo '<div><img src="src/placeholder.png" class="capa-noticia"></div>';
+        if($escrever['id_imagem'] != 0) {
+            $imagemSQL = mysqli_query($conexao, 'SELECT caminho FROM imagem WHERE id = '.$escrever['id_imagem']);
+            $caminho = mysqli_fetch_array($imagemSQL);
+            echo '<div><img src="'.$caminho['caminho'].'" class="capa-noticia"></div>';
+        }
         echo '<div class="autor-noticia">Escrito por '.htmlspecialchars($autor['nome']).'</div>';
         echo '<div class="conteudo-noticia">'.nl2br(htmlspecialchars_decode($escrever["conteudo"])).'</div>';
     }

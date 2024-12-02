@@ -1,0 +1,4 @@
+- Lembre de dar permissão à pasta SRC
+
+- senha autor: AUTH2024KEY!@#456
+- senha revisor: REVIEW2024PASS$%^789

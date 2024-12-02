@@ -9,12 +9,12 @@
         <div class="container-fluid">
             <div class="row menu-bar">
                 <div class="col-4">
-                    <a href="check_user.php">Usuário</a>
                 </div>
                 <div class="col-4 text-center">
-                    <a href="index.php">Teste</a>
+                    <div class="titulo-site">Mundo em Foco</div>
                 </div>
                 <div class="col-4 text-end">
+                    <a href="check_user.php"><img class="icone-user" src="src/user.png"></a>
                 </div>
             </div>
         </div>
@@ -34,19 +34,19 @@
     $resultadoQueryMySQL = mysqli_query($conexao, "select id, titulo, id_imagem, CONCAT(SUBSTRING(conteudo, 1, 300), '...') AS conteudo_resumido, status from noticia");
 
     while($escrever = mysqli_fetch_array($resultadoQueryMySQL)) {
-        if($escrever['status'] == 'Aprovado') {
+        if($escrever['status'] == 'Aprovada') {
             echo '<div class="icone-noticia">';
-                echo '<div class="row">';
-                    if($escrever['id_imagem'] == NULL){
-                        echo '<div class="col-4">';
-                            echo '<img class="img-noticia" src="src/placeholder.png">';
-                        echo '</div>';
+                echo '<div class="row w-100">';
+                    if($escrever['id_imagem'] == 0){
+                        echo '<div class="col-12">';
                     }else {
-                        echo '<div class="col-4">';
-                            echo '<img class="img-noticia" src="'.$escrever['id_imagem'].'">';
+                        $imgSql = mysqli_query($conexao, 'SELECT caminho FROM imagem WHERE id = '.$escrever['id_imagem'].'');
+                        $caminho = mysqli_fetch_array($imgSql);
+                        echo '<div class="col-4 d-flex align-items-center justify-content-center">';
+                            echo '<img class="img-noticia" src="'.$caminho['caminho'].'">';
                         echo '</div>';
+                        echo '<div class="col-8">';
                     }
-                    echo '<div class="col-8">';
                         echo '<h3>'.$escrever['titulo'].'</h3>';
                         echo '<p>'.$escrever['conteudo_resumido'].'</p>';
                         echo '<a href="noticia.php?id='.$escrever['id'].'"><h4>Ler matéria</h4></a>';

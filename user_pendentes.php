@@ -9,7 +9,13 @@
         <div class="container-fluid">
             <div class="row row-container">
                 <div class="col-3 user-menu">
-                    <img class="img-fluid rounded" src="src/user.jpg">
+                    <?php
+                        if(!isset($_COOKIE['user_imagem'])) {
+                            echo '<img class="img-fluid rounded" src="src/user.png">';
+                        }else {
+                            echo '<img class="img-fluid rounded" src="'.$_COOKIE['user_imagem'].'">';
+                        }
+                    ?>
                     <a href="user_dados.php">Meus Dados</a>
                     <?php
                         if(($_COOKIE['user_tipo']) == "autor") {
@@ -24,10 +30,51 @@
 
                     <a href="index.php">Voltar ao site</a>
                 </div>
-                <div class="col-9 user-content"></div>
-                </div>
-            </div>
-        </div>
+                <div class="col-9 user-content">
+                    <div class="title">Notícias pendentes</div>
     </body>
 </html>
 
+<?php
+    $host = 'localhost:3306';
+    $user = 'root';
+    $pass = '';
+    $base = 'portal_bd';
+    $conexao = mysqli_connect($host, $user, $pass, $base);
+
+    $resultadoQueryMySQL = mysqli_query($conexao, "select id, titulo, id_imagem, status, CONCAT(SUBSTRING(conteudo, 1, 300), '...') AS conteudo_resumido from noticia WHERE status = 'Em espera'");
+
+    while($escrever = mysqli_fetch_array($resultadoQueryMySQL)) {
+        echo '<div class="container icone-noticia">';
+            echo '<div class="row w-100">';
+                if($escrever['id_imagem'] == 0){
+                    echo '<div class="col-12">';
+                }else {
+                    $imgSql = mysqli_query($conexao, 'SELECT caminho FROM imagem WHERE id = '.$escrever['id_imagem'].'');
+                    $caminho = mysqli_fetch_array($imgSql);
+                    echo '<div class="col-4 d-flex align-items-center justify-content-center">';
+                        echo '<img class="img-noticia" src="'.$caminho['caminho'].'">';
+                    echo '</div>';
+                    echo '<div class="col-8">';
+                }
+                        echo '<h3>'.$escrever['titulo'].'</h3>';
+                        echo '<p>'.$escrever['conteudo_resumido'].'</p>';
+                        echo '<div class="status">'.$escrever['status'].'</div>';
+                        echo '<a href="noticia_autor.php?id='.$escrever['id'].'"><h4>Ler matéria</h4></a>';
+                        echo '<form method="POST" action="atualizarStatus.php">';
+                            echo '<input type="hidden" name="id" value="'.$escrever['id'].'">';
+                            echo '<button type="submit" name="acao" value="aprovar" class="btn btn-success me-2" onclick="return confirm(\'Você tem certeza de aprovar esta notícia?\');">Aprovar notícia</button>';
+                            echo '<button type="submit" name="acao" value="rejeitar" class="btn btn-danger" onclick="return confirm(\'Você tem certeza de rejeitar esta notícia?\');">Rejeitar notícia</button>';
+                        echo '</form>';
+                echo '</div>';
+            echo '</div>';
+        echo '</div>';
+    }
+
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+
+    mysqli_close($conexao);
+
+?>
