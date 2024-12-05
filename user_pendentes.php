@@ -7,6 +7,11 @@
         header('Location: entrar.php');
         exit();
     }
+
+    if($_COOKIE['user_tipo'] == 'leitor' || $_COOKIE['user_tipo'] == 'autor') {
+        header('Location: user_dados.php');
+        exit();
+    }
 ?>
 
 
